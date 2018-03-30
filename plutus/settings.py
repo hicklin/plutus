@@ -10,24 +10,34 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-import os
+# Build paths inside the project like this: os.path.join(PROJECT_ROOT, ...)
+from os.path import abspath, basename, dirname, join, normpath
 from mongoengine import connect
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+connect('plutus')
 
+# ##### PATH CONFIGURATION ################################
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
+# DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+DJANGO_ROOT = dirname(abspath(__file__))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'azv8$#*aywdlorqx3pgz*mg*koba16h_#d=o266&t@^cd)*fg3'
+PROJECT_ROOT = dirname(DJANGO_ROOT)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SITE_NAME = basename(DJANGO_ROOT)
 
-ALLOWED_HOSTS = []
+STATIC_ROOT = join(PROJECT_ROOT, 'run', 'static')
 
+MEDIA_ROOT = join(PROJECT_ROOT, 'run', 'media')
+
+STATICFILES_DIRS = [
+    join(PROJECT_ROOT, 'static'),
+]
+
+PROJECT_TEMPLATES = [
+    join(PROJECT_ROOT, 'templates'),
+]
+
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -51,12 +61,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'plutus.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': PROJECT_TEMPLATES,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,24 +76,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'plutus.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-connect('plutus')
-# connect(name='plutus', host='127.0.0.1', port='27017', username='', password='')
-
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -102,22 +92,78 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# ##### SECURITY CONFIGURATION ############################
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.0/topics/i18n/
+# We store the secret key here
+# The required SECRET_KEY is fetched at the end of this file
+SECRET_FILE = normpath(join(PROJECT_ROOT, 'run', 'SECRET.key'))
+
+# These persons receive error notification
+ADMINS = (
+    ('William Hicklin', 'venturehicklin@gmail.com'),
+)
+
+MANAGERS = ADMINS
+
+
+# ##### DJANGO RUNNING CONFIGURATION ######################
+
+# The default WSGI application
+WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
+
+# The root URL configuration
+ROOT_URLCONF = '%s.urls' % SITE_NAME
+
+# This site's ID
+SITE_ID = 1
+
+# The URL for static files
+STATIC_URL = '/static/'
+
+# The URL for media files
+MEDIA_URL = '/media/'
+
+
+# ##### DEBUG CONFIGURATION ###############################
+DEBUG = True
+
+
+# ##### INTERNATIONALIZATION ##############################
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
 
+# Internationalization
 USE_I18N = True
 
+# Localisation
 USE_L10N = True
 
+# enable timezone awareness by default
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
+# ##### AUTHENTICATION URL ################################
 
-STATIC_URL = '/static/'
+# LOGIN_URL = '/authentication/login/'
+
+
+# ##### MAIL SERVER DETAILS ###############################
+
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 25
+
+
+# ##### GRAB SECRET KEY ###################################
+
+try:
+    SECRET_KEY = open(SECRET_FILE).read().strip()
+except IOError:
+    try:
+        from django.utils.crypto import get_random_string
+        chars = 'abcdefghijklmnopqrstuvwxyz0123456789!$%&()=+-_'
+        SECRET_KEY = get_random_string(50, chars)
+        with open(SECRET_FILE, 'w') as f:
+            f.write(SECRET_KEY)
+    except IOError:
+        raise Exception('Could not open %s for writing!' % SECRET_FILE)
