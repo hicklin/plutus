@@ -3,23 +3,76 @@
 {% load staticfiles %}
 
 {% block title %}
-  Not found
+  Add purchase
 {% endblock %}
 
 {% block body %}
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Add a purchase
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href=""></a>Dashboard</li>
-        <li class="active">Add purchase</li>
-      </ol>
-    </section>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Add a purchase
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href=""></a>Dashboard</li>
+      <li class="active">Add purchase</li>
+    </ol>
+  </section>
 
-    <!-- Main content -->
-    <section class="content">
-    </section>
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-info box-solid editable-table">
+          <div class="box-header">
+            <h3 class="box-title">General info</h3>
+          </div>
+          <div class="box-body">
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Timestamp</label>
+                <input class="form-control" type="text" name="date_time_field" value="" />
+              </div>
+
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Merchant</label>
+                <select class="form-control select2" style="width: 100%;">
+                  <option>Alaska</option>
+                  <option>Morissons</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+{% endblock %}
+
+{% block end_scripts %}
+
+<script type="text/javascript">
+$('input[name="date_time_field"]').daterangepicker({
+    "singleDatePicker": true,
+    "timePicker": true,
+    "timePicker24Hour": true,
+    "timePickerIncrement": 5,
+    "showCustomRangeLabel": false,
+    "locale": {
+      "format": "YYYY-MM-DD HH:mm",
+      "separator": " - ",
+      "firstDay": 1
+    },
+    "maxDate": moment().format('YYYY-MM-DD HH:mm'),
+    "startDate": moment().format('YYYY-MM-DD HH:mm')
+});
+</script>
 
 {% endblock %}
