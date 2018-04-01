@@ -5,6 +5,7 @@ def add_purchase(request):
 
     context = {'user': "test", 'data_base': "Plutus"}
 
+    # return render(request, 'expenses/add_purchase.html', context)
     return render(request, 'expenses/add_purchase.html', context)
 
 
