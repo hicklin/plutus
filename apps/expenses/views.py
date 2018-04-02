@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import json
 from apps.expenses.models import *
 import datetime
+from ast import literal_eval
 import string
 import random
 
@@ -26,10 +27,11 @@ def add_purchase_processor(request):
     currency = purchase_dict['currency']
     item_objects = []
     for item in purchase_dict['items']:
+        print(item)
         item_object = Item(name=item['name'],
                            size=Size(value=item['size'], unit=item['unit']),
                            cost=Cost(value=item['cost'], currency=currency),
-                           asset=item['asset'],
+                           asset=literal_eval(item['asset']),
                            tags=item['tags'],
                            notes=item['notes'])
         amount = int(item['amount'])
