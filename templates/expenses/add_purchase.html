@@ -47,14 +47,16 @@
   <!-- Main content -->
   <section class="content">
     <div class="row col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">General info</div>
-        <div class="panel-body">
+      <div class="box box-default box-solid">
+        <div class="box-header">
+          <h3 class="box-title">General information</h3>
+        </div>
+        <div class="box-body">
           <div class="form-row">
             <div class="col-md-5">
               <div class="form-group">
                 <label>Timestamp</label>
-                <input class="form-control" type="text" name="date_time_field" value="" />
+                <input class="form-control" type="text" name="timestamp" value="" />
               </div>
             </div>
 
@@ -85,15 +87,13 @@
     </div>
 
     <div class="row col-md-12">
-      <div class="panel panel-info">
-        <div class="panel-heading">Items
-          <button onclick="generateNewItem()" type="submit" class="btn btn-success pull-right">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-          </button>
+      <div class="box box-primary box-solid">
+        <div class="box-header">
+          <h3 class="box-title">Items</h3>
         </div>
-        <div class="panel-body" id="items_panel">
+        <div class="box-body" id="items_panel">
           <div class="hidden" id="item_template">
-            <div class="panel panel-default">
+            <div class="panel panel-default" name="item_panel">
               <div class="panel-body">
                 <div class="form-row">
                   <!-- Name -->
@@ -122,7 +122,7 @@
 
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input class="form-control" type="text" name="amount_of_item" value="" placeholder="Amount" required/>
+                      <input class="form-control" type="text" name="item_amount" value="" placeholder="Amount" required/>
                     </div>
                   </div>
                 </div>
@@ -161,43 +161,58 @@
             </div>
           </div>
         </div>
+        <div class="box-footer">
+          <button onclick="generateNewItem()" type="submit" class="btn btn-success pull-right">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
     </div>
 
 
     <div class="row col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">Additional Info</div>
-        <div class="panel-body">
+      <div class="box box-default box-solid">
+        <div class="box-header">
+          <h3 class="box-title">Additional information</h3>
+        </div>
+        <div class="box-body">
 
           <div class="col-md-3">
             <div class="form-group">
               <label>Discount</label>
-              <input class="form-control" type="text" name="Item" value="" />
+              <input class="form-control" type="text" name="discount" value="" />
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
               <label>Total cost</label>
-              <input class="form-control" type="text" name="Item" value="" />
+              <input class="form-control" type="text" name="total_cost" value="" />
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
               <label>Charges</label>
-              <input class="form-control" type="text" name="Item" value="" />
+              <input class="form-control" type="text" name="charges" value="" />
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
               <label>Tags</label>
-              <input class="form-control" type="text" name="Item" value="" />
+              <input class="form-control" type="text" name="purchase_tags" value="" />
             </div>
           </div>
-
+        </div>
+        <div class="box-footer">
+          <button onclick="submitEntries()" type="submit" class="btn btn-success pull-right">Submit</button>
         </div>
       </div>
     </div>
+
+    <form class="hidden" action="/expenses/insert_purchase" method="post" id="final_form">
+      {% csrf_token %}
+      <input type="text" name="purchase_document" value=""/>
+      <button type="submit"></button>
+    </form>
 
   </section>
 
@@ -210,10 +225,10 @@
     function init_select2() {
       //Initialize Select2 Elements
       $(".select2").select2();
-    };
+    }
   </script>
   <script type="text/javascript">
-  $('input[name="date_time_field"]').daterangepicker({
+  $('input[name="timestamp"]').daterangepicker({
       "singleDatePicker": true,
       "timePicker": true,
       "timePicker24Hour": true,
@@ -230,14 +245,49 @@
   </script>
   <script type="text/javascript">
 
-  var item_template_html = $("#item_template").html();
+  var item_template_object = $("#item_template");
+  var item_template_html = item_template_object.html();
+  item_template_object.remove();
 
   function generateNewItem() {
     $("#items_panel").append(item_template_html);
-    console.log(item_template_html);
     init_select2();
   }
   generateNewItem();
+
+  function getEntries(){
+      var items = [];
+      $('[name="item_panel"]').each(function () {
+          items.push({
+              "name": $(this).find('[name="item_name"]').val(),
+              "size": $(this).find('[name="item_size"]').val(),
+              "unit": $(this).find('[name="item_unit"]').val(),
+              "cost": $(this).find('[name="item_cost"]').val(),
+              "amount": $(this).find('[name="item_amount"]').val(),
+              "asset": $(this).find('[name="item_asset"]').val(),
+              "notes": $(this).find('[name="item_notes"]').val(),
+              "tags": $(this).find('[name="item_tags"]').val()
+          });
+      });
+
+      return {
+          "timestamp": $('[name="timestamp"]').val(),
+          "merchant": $('[name="merchant"]').val(),
+          "currency": $('[name="currency"]').val(),
+          "items": items,
+          "discount": $('[name="discount"]').val(),
+          "total_cost": $('[name="total_cost"]').val(),
+          "charges": $('[name="charges"]').val(),
+          "purchase_tags": $('[name="purchase_tags"]').val()
+      };
+  }
+  
+  function submitEntries() {
+      var form_object = $("#final_form");
+      form_object.find('[name="purchase_document"]').val(JSON.stringify(getEntries()));
+      console.log(form_object.find('[name="purchase_document"]').val());
+      {#form_object.submit();#}
+  }
   </script>
 
 {% endblock %}
