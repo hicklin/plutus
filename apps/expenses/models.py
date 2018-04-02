@@ -3,26 +3,27 @@ from mongoengine import *
 
 class Cost(EmbeddedDocument):
     value = FloatField()
-    currency = StringField(max_length=3, default='GPB')
+    currency = StringField(max_length=3, default='GBP')
 
 
-class Quantity(EmbeddedDocument):
+class Size(EmbeddedDocument):
     value = FloatField()
     unit = StringField(max_length=10)
 
 
 class Item(EmbeddedDocument):
     name = StringField(max_length=200)
-    quantity = ListField(EmbeddedDocumentField(Quantity))
-    cost = ListField(EmbeddedDocumentField(Cost))
+    size = EmbeddedDocumentField(Size)
+    cost = EmbeddedDocumentField(Cost)
     asset = BooleanField()
-    tags = ListField(StringField(max_length=30))
+    tags = ListField(StringField(max_length=30), null=True)
+    notes = StringField(null=True)
 
 
-class Merchant(EmbeddedDocument):
-    name = StringField(max_length=100)
-    location = StringField(max_length=100)
-    post_code = StringField(max_length=10)
+# class Merchant(EmbeddedDocument):
+#     name = StringField(max_length=100)
+#     location = StringField(max_length=100)
+#     post_code = StringField(max_length=10)
 
 
 class Charges(EmbeddedDocument):
@@ -32,10 +33,11 @@ class Charges(EmbeddedDocument):
 
 class Purchase(Document):
     items = ListField(EmbeddedDocumentField(Item))
-    merchant = ListField(EmbeddedDocumentField(Merchant))
+    # merchant = EmbeddedDocumentField(Merchant)
+    merchant = StringField()
     timestamp = DateTimeField()
-    discount = ListField(EmbeddedDocumentField(Cost))
-    cost = ListField(EmbeddedDocumentField(Cost))
-    extra_charges = ListField(EmbeddedDocumentField(Charges))
-    tags = ListField(StringField(max_length=30))
+    discount = EmbeddedDocumentField(Cost, null=True)
+    cost = EmbeddedDocumentField(Cost, null=True)
+    charges = EmbeddedDocumentField(Cost, null=True)
+    tags = ListField(StringField(max_length=30), null=True)
 
