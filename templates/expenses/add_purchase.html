@@ -6,7 +6,33 @@
   Add purchase
 {% endblock %}
 
+{% block scripts %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{% static "plugins/iCheck/all.css" %} ">
+{% endblock %}
+
 {% block body %}
+
+  <style>
+  .select2-container--default .select2-selection--single{
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+  }
+  .select2-container .select2-selection--single{
+    height: 34px;
+  }
+  .select2-container--default .select2-selection--multiple{
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+  }
+  .select2-container .select2-selection--multiple{
+    height: 34px;
+  }
+  </style>
+
+
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
@@ -20,14 +46,11 @@
 
   <!-- Main content -->
   <section class="content">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="box box-info box-solid editable-table">
-          <div class="box-header">
-            <h3 class="box-title">General info</h3>
-          </div>
-          <div class="box-body">
-
+    <div class="row col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">General info</div>
+        <div class="panel-body">
+          <div class="form-row">
             <div class="col-md-5">
               <div class="form-group">
                 <label>Timestamp</label>
@@ -56,94 +79,117 @@
             </div>
 
           </div>
+
         </div>
       </div>
+    </div>
 
-      <div class="col-md-12">
-        <div class="box box-info box-solid editable-table">
-          <div class="box-header">
-            <h3 class="box-title">Items</h3>
-          </div>
-          <div class="box-body">
+    <div class="row col-md-12">
+      <div class="panel panel-info">
+        <div class="panel-heading">Items</div>
+        <div class="panel-body">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="form-row">
+                <!-- Name -->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input class="form-control" type="text" id="item-name" name="Item" value="" placeholder="Name" required/>
+                  </div>
+                </div>
+                <!-- Size -->
+                <div class="col-md-3">
+                  <div class="input-group">
+                    <input class="form-control" style="width: 60%" type="text" name="Item" value="" placeholder="Quantity" required/>
+                    <select class="form-control select2" style="width: 40%;">
+                      <option>kg</option>
+                      <option>L</option>
+                      <option>pkt</option>
+                    </select>
+                  </div>
+                </div>
 
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Name</label>
-                <input class="form-control" type="text" name="Item" value="" />
-              </div>
-            </div>
-            <div class="col-md-1">
-              <div class="form-group">
-                <label>Quantity</label>
-                <input class="form-control" type="text" name="Item" value="" />
-              </div>
-            </div>
-            <div class="col-md-1">
-              <div class="form-group">
-                <label>Unit</label>
-                <input class="form-control" type="text" name="Item" value="" />
-              </div>
-            </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input class="form-control" type="text" name="Item" value="" placeholder="Cost"/>
+                  </div>
+                </div>
 
-            <div class="col-md-1">
-              <div class="form-group">
-                <label>Cost</label>
-                <input class="form-control" type="text" name="Item" value="" />
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input class="form-control" type="text" name="Item" value="" placeholder="Amount" required/>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div class="col-md-1">
-              <div class="form-group">
-                <label>Asset</label>
-                <input class="form-control" type="text" name="Item" value="False" />
-              </div>
-            </div>
+              <div class="form-row">
 
-            <div class="col-md-5">
-              <div class="form-group">
-                <label>Tags</label>
-                <input class="form-control" type="text" name="Item" value="" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                <div class="col-md-2">
+                  <label>
+                    <input type="checkbox">
+                    Asset
+                  </label>
+                </div>
 
-      <div class="col-md-12">
-        <div class="box box-info box-solid editable-table">
-          <div class="box-header">
-            <h3 class="box-title">Additional info</h3>
-          </div>
-          <div class="box-body">
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <input class="form-control" type="text" name="Item" value="" placeholder="Notes"/>
+                  </div>
+                </div>
 
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Discount</label>
-                <input class="form-control" type="text" name="Item" value="" />
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Total cost</label>
-                <input class="form-control" type="text" name="Item" value="" />
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Charges</label>
-                <input class="form-control" type="text" name="Item" value="" />
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Tags</label>
-                <input class="form-control" type="text" name="Item" value="" />
+                <div class="col-md-5">
+                  <div class="form-group">
+                      <select class="form-control select2" multiple="multiple" data-placeholder="Tags">
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>California</option>
+                        <option>Delaware</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Washington</option>
+                      </select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
+
+    <div class="row col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Additional Info</div>
+        <div class="panel-body">
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Discount</label>
+              <input class="form-control" type="text" name="Item" value="" />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Total cost</label>
+              <input class="form-control" type="text" name="Item" value="" />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Charges</label>
+              <input class="form-control" type="text" name="Item" value="" />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Tags</label>
+              <input class="form-control" type="text" name="Item" value="" />
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
   </section>
@@ -151,22 +197,31 @@
 {% endblock %}
 
 {% block end_scripts %}
+  <!-- Select2 -->
+  <script src="{% static "bower_components/select2/dist/js/select2.full.min.js" %}"></script>
+  <script>
+    $(function () {
+      //Initialize Select2 Elements
+      $(".select2").select2();
+    });
+  </script>
+  <script type="text/javascript">
+  $('input[name="date_time_field"]').daterangepicker({
+      "singleDatePicker": true,
+      "timePicker": true,
+      "timePicker24Hour": true,
+      "timePickerIncrement": 5,
+      "showCustomRangeLabel": false,
+      "locale": {
+        "format": "YYYY-MM-DD HH:mm",
+        "separator": " - ",
+        "firstDay": 1
+      },
+      "maxDate": moment().format('YYYY-MM-DD HH:mm'),
+      "startDate": moment().format('YYYY-MM-DD HH:mm')
+  });
 
-<script type="text/javascript">
-$('input[name="date_time_field"]').daterangepicker({
-    "singleDatePicker": true,
-    "timePicker": true,
-    "timePicker24Hour": true,
-    "timePickerIncrement": 5,
-    "showCustomRangeLabel": false,
-    "locale": {
-      "format": "YYYY-MM-DD HH:mm",
-      "separator": " - ",
-      "firstDay": 1
-    },
-    "maxDate": moment().format('YYYY-MM-DD HH:mm'),
-    "startDate": moment().format('YYYY-MM-DD HH:mm')
-});
-</script>
+  </script>
+
 
 {% endblock %}
