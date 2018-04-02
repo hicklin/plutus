@@ -61,7 +61,7 @@
             <div class="col-md-5">
               <div class="form-group">
                 <label>Merchant</label>
-                <select class="form-control select2" style="width: 100%;">
+                <select class="form-control select2" name="merchant" style="width: 100%;">
                   <option>Alaska</option>
                   <option>Morissons</option>
                 </select>
@@ -71,7 +71,7 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label>Currency</label>
-                <select class="form-control select2" style="width: 100%;">
+                <select class="form-control select2" name="currency" style="width: 100%;">
                   <option>GPB</option>
                   <option>EUR</option>
                 </select>
@@ -86,69 +86,76 @@
 
     <div class="row col-md-12">
       <div class="panel panel-info">
-        <div class="panel-heading">Items</div>
-        <div class="panel-body">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="form-row">
-                <!-- Name -->
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <input class="form-control" type="text" id="item-name" name="Item" value="" placeholder="Name" required/>
+        <div class="panel-heading">Items
+          <button onclick="generateNewItem()" type="submit" class="btn btn-success pull-right">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="panel-body" id="items_panel">
+          <div class="hidden" id="item_template">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="form-row">
+                  <!-- Name -->
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input class="form-control" type="text" id="item-name" name="item_name" value="" placeholder="Name" required/>
+                    </div>
                   </div>
-                </div>
-                <!-- Size -->
-                <div class="col-md-3">
-                  <div class="input-group">
-                    <input class="form-control" style="width: 60%" type="text" name="Item" value="" placeholder="Quantity" required/>
-                    <select class="form-control select2" style="width: 40%;">
-                      <option>kg</option>
-                      <option>L</option>
-                      <option>pkt</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <input class="form-control" type="text" name="Item" value="" placeholder="Cost"/>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <input class="form-control" type="text" name="Item" value="" placeholder="Amount" required/>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-row">
-
-                <div class="col-md-2">
-                  <label>
-                    <input type="checkbox">
-                    Asset
-                  </label>
-                </div>
-
-                <div class="col-md-5">
-                  <div class="form-group">
-                    <input class="form-control" type="text" name="Item" value="" placeholder="Notes"/>
-                  </div>
-                </div>
-
-                <div class="col-md-5">
-                  <div class="form-group">
-                      <select class="form-control select2" multiple="multiple" data-placeholder="Tags">
-                        <option>Alabama</option>
-                        <option>Alaska</option>
-                        <option>California</option>
-                        <option>Delaware</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Washington</option>
+                  <!-- Size -->
+                  <div class="col-md-3">
+                    <div class="input-group">
+                      <input class="form-control" style="width: 60%" type="text" name="item_size" value="" placeholder="Size" required/>
+                      <select class="form-control select2" name="item_unit" style="width: 40%;">
+                        <option>kg</option>
+                        <option>L</option>
+                        <option>pkt</option>
                       </select>
+                    </div>
                   </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input class="form-control" type="text" name="item cost" value="" placeholder="Cost"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input class="form-control" type="text" name="amount_of_item" value="" placeholder="Amount" required/>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+
+                  <div class="col-md-1">
+                    <label>
+                      <input type="checkbox" name="item_asset">
+                      Asset
+                    </label>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <input class="form-control" type="text" name="item_notes" value="" placeholder="Notes"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <select class="form-control select2" multiple="multiple" name="item_tags" data-placeholder="Tags">
+                          <option>Alabama</option>
+                          <option>Alaska</option>
+                          <option>California</option>
+                          <option>Delaware</option>
+                          <option>Tennessee</option>
+                          <option>Texas</option>
+                          <option>Washington</option>
+                        </select>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -200,10 +207,10 @@
   <!-- Select2 -->
   <script src="{% static "bower_components/select2/dist/js/select2.full.min.js" %}"></script>
   <script>
-    $(function () {
+    function init_select2() {
       //Initialize Select2 Elements
       $(".select2").select2();
-    });
+    };
   </script>
   <script type="text/javascript">
   $('input[name="date_time_field"]').daterangepicker({
@@ -220,8 +227,17 @@
       "maxDate": moment().format('YYYY-MM-DD HH:mm'),
       "startDate": moment().format('YYYY-MM-DD HH:mm')
   });
-
   </script>
+  <script type="text/javascript">
 
+  var item_template_html = $("#item_template").html();
+
+  function generateNewItem() {
+    $("#items_panel").append(item_template_html);
+    console.log(item_template_html);
+    init_select2();
+  }
+  generateNewItem();
+  </script>
 
 {% endblock %}
