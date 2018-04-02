@@ -41,3 +41,17 @@ class Purchase(Document):
     charges = EmbeddedDocumentField(Cost, null=True)
     tags = ListField(StringField(max_length=30), null=True)
 
+
+class ItemTags(Document):
+    name = StringField(max_length=15)
+    description = StringField()
+
+
+class PurchaseTags(Document):
+    name = StringField(max_length=15)
+    description = StringField()
+
+
+class Units(Document):
+    unit = StringField(max_length=15)
+    description = StringField()

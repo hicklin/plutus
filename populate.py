@@ -1,0 +1,11 @@
+from apps.expenses.models import *
+Units(unit="kg", description="kilograme").save()
+Units(unit="ltr", description="liter").save()
+Units(unit="pkt", description="packet").save()
+ItemTags(name="Alcohol").save()
+ItemTags(name="Entertainment").save()
+ItemTags(name="Electronics").save()
+ItemTags(name="Food").save()
+ItemTags(name="Lunch").save()
+PurchaseTags(name="groceries").save()
+PurchaseTags(name="furniture").save()

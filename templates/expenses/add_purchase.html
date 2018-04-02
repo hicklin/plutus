@@ -113,9 +113,9 @@
                              value=""
                              placeholder="Size" required/>
                       <select class="form-control select2" name="item_unit" style="width: 40%;">
-                        <option>kg</option>
-                        <option>L</option>
-                        <option>pkt</option>
+                        {% for unit in units %}
+                        <option>{{ unit }}</option>
+                        {% endfor %}
                       </select>
                     </div>
                   </div>
@@ -153,13 +153,9 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <select class="form-control select2" multiple="multiple" name="item_tags" data-placeholder="Tags">
-                        <option>Alabama</option>
-                        <option>Alaska</option>
-                        <option>California</option>
-                        <option>Delaware</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Washington</option>
+                        {% for item_tag in item_tags %}
+                        <option>{{ item_tag }}</option>
+                        {% endfor %}
                       </select>
                     </div>
                   </div>
@@ -207,13 +203,9 @@
             <label>Tags</label>
             <div class="form-group">
               <select class="form-control select2" multiple="multiple" name="purchase_tags" data-placeholder="Tags">
-                <option>Alabama</option>
-                <option>Alaska</option>
-                <option>California</option>
-                <option>Delaware</option>
-                <option>Tennessee</option>
-                <option>Texas</option>
-                <option>Washington</option>
+                {% for purchase_tag in purchase_tags %}
+                <option>{{ purchase_tag }}</option>
+                {% endfor %}
               </select>
             </div>
           </div>

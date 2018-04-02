@@ -13,7 +13,10 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 
 def add_purchase(request):
 
-    context = {'user': "test", 'data_base': "Plutus"}
+    item_tags = [item_tag.name for item_tag in ItemTags.objects.all()]
+    purchase_tags = [purchase_tag.name for purchase_tag in PurchaseTags.objects.all()]
+    units = [unit.unit for unit in Units.objects.all()]
+    context = {"item_tags": item_tags, "purchase_tags": purchase_tags, "units": units}
 
     # return render(request, 'expenses/add_purchase.html', context)
     return render(request, 'expenses/add_purchase.html', context)
