@@ -31,9 +31,14 @@ def add_purchase_processor(request):
     currency = purchase_dict['currency']
     item_objects = []
     for item in purchase_dict['items']:
-        print(item)
+        size = item['size']
+        unit = item['unit']
+        if size == "":
+            size = None
+        if unit == "":
+            unit = None
         item_object = Item(name=item['name'],
-                           size=Size(value=item['size'], unit=item['unit']),
+                           size=Size(value=size, unit=unit),
                            cost=Cost(value=item['cost'], currency=currency),
                            asset=literal_eval(item['asset']),
                            tags=item['tags'],
