@@ -20,10 +20,10 @@ class Item(EmbeddedDocument):
     notes = StringField(null=True)
 
 
-# class Merchant(EmbeddedDocument):
-#     name = StringField(max_length=100)
-#     location = StringField(max_length=100)
-#     post_code = StringField(max_length=10)
+class Merchant(Document):
+    name = StringField(max_length=100)
+    location = StringField(max_length=100)
+    post_code = StringField(max_length=10)
 
 
 class Charges(EmbeddedDocument):

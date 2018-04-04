@@ -67,8 +67,9 @@
               <div class="form-group">
                 <label>Merchant</label>
                 <select class="form-control select2" name="merchant" style="width: 100%;">
-                  <option>Alaska</option>
-                  <option>Morissons</option>
+                  {% for merchant in merchants %}
+                    <option>{{ merchant }}</option>
+                  {% endfor %}
                 </select>
               </div>
             </div>

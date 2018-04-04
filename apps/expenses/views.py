@@ -16,7 +16,8 @@ def add_purchase(request):
     item_tags = [item_tag.name for item_tag in ItemTags.objects.all()]
     purchase_tags = [purchase_tag.name for purchase_tag in PurchaseTags.objects.all()]
     units = [unit.unit for unit in Units.objects.all()]
-    context = {"item_tags": item_tags, "purchase_tags": purchase_tags, "units": units}
+    merchants = ["%s %s" % (merchant.name, merchant.location) for merchant in Merchant.objects.all()]
+    context = {"item_tags": item_tags, "purchase_tags": purchase_tags, "units": units, "merchants": merchants}
 
     # return render(request, 'expenses/add_purchase.html', context)
     return render(request, 'expenses/add_purchase.html', context)
