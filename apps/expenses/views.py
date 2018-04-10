@@ -14,7 +14,9 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 def add_purchase(request):
 
     item_tags = [item_tag.name for item_tag in ItemTags.objects.all()]
+    item_tags.sort()
     purchase_tags = [purchase_tag.name for purchase_tag in PurchaseTags.objects.all()]
+    purchase_tags.sort()
     units = [unit.unit for unit in Units.objects.all()]
     merchants = ["%s %s" % (merchant.name, merchant.location) for merchant in Merchant.objects.all()]
     context = {"item_tags": item_tags, "purchase_tags": purchase_tags, "units": units, "merchants": merchants}
