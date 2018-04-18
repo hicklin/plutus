@@ -11,7 +11,7 @@ class Size(EmbeddedDocument):
     unit = StringField(max_length=10)
 
 
-class Item(EmbeddedDocument):
+class Item(Document):
     name = StringField(max_length=200)
     size = EmbeddedDocumentField(Size)
     cost = EmbeddedDocumentField(Cost)
@@ -32,7 +32,8 @@ class Charges(EmbeddedDocument):
 
 
 class Purchase(Document):
-    items = ListField(EmbeddedDocumentField(Item))
+    items = ListField(ReferenceField(Item))
+    # items = ListField(EmbeddedDocumentField(Item))
     # merchant = EmbeddedDocumentField(Merchant)
     merchant = StringField()
     timestamp = DateTimeField()

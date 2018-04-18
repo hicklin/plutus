@@ -39,20 +39,29 @@ def add_purchase_processor(request):
             size = None
         if unit == "":
             unit = None
-        item_object = Item(name=item['name'],
-                           size=Size(value=size, unit=unit),
-                           cost=Cost(value=item['cost'], currency=currency),
-                           asset=literal_eval(item['asset']),
-                           tags=item['tags'],
-                           notes=item['notes'])
         amount = int(item['amount'])
+        print(item['asset'])
         if amount > 1:
             ref = id_generator()
-            item_object.notes = "%s: %s" % (ref, item_object.notes)
+            notes = "%s: %s" % (ref, item['notes'])
             for _ in range(amount):
-                item_objects.append(item_object)
+                item_object = Item(name=item['name'],
+                                   size=Size(value=size, unit=unit),
+                                   cost=Cost(value=item['cost'], currency=currency),
+                                   asset=literal_eval(item['asset']),
+                                   tags=item['tags'],
+                                   notes=notes)
+                saved_item_object = item_object.save()
+                item_objects.append(saved_item_object)
         else:
-            item_objects.append(item_object)
+            item_object = Item(name=item['name'],
+                               size=Size(value=size, unit=unit),
+                               cost=Cost(value=item['cost'], currency=currency),
+                               asset=literal_eval(item['asset']),
+                               tags=item['tags'],
+                               notes=item['notes'])
+            saved_item_object = item_object.save()
+            item_objects.append(saved_item_object)
     purchase_object = Purchase(
         items=item_objects,
         merchant=purchase_dict['merchant'],
