@@ -140,7 +140,7 @@
 
                   <div class="col-md-1">
                     <label>
-                      <input type="checkbox" name="item_asset" value="False">
+                      <input type="checkbox" name="item_asset" data-val="true" value="true">
                       Asset
                     </label>
                   </div>
@@ -274,7 +274,7 @@
                   "unit": $(this).find('[name="item_unit"]').val(),
                   "cost": $(this).find('[name="item_cost"]').val(),
                   "amount": $(this).find('[name="item_amount"]').val(),
-                  "asset": $(this).find('[name="item_asset"]').val(),
+                  "asset": $(this).find('[name="item_asset"]').is(':checked'),
                   "notes": $(this).find('[name="item_notes"]').val(),
                   "tags": $(this).find('[name="item_tags"]').val()
               });

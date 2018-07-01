@@ -5,7 +5,7 @@ import datetime
 from ast import literal_eval
 import string
 import random
-
+from distutils.util import strtobool
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -40,7 +40,6 @@ def add_purchase_processor(request):
         if unit == "":
             unit = None
         amount = int(item['amount'])
-        print(item['asset'])
         if amount > 1:
             ref = id_generator()
             notes = "%s: %s" % (ref, item['notes'])
@@ -48,7 +47,7 @@ def add_purchase_processor(request):
                 item_object = Item(name=item['name'],
                                    size=Size(value=size, unit=unit),
                                    cost=Cost(value=item['cost'], currency=currency),
-                                   asset=literal_eval(item['asset']),
+                                   asset=bool(strtobool(str(item['asset']))),
                                    tags=item['tags'],
                                    notes=notes)
                 saved_item_object = item_object.save()
@@ -57,7 +56,7 @@ def add_purchase_processor(request):
             item_object = Item(name=item['name'],
                                size=Size(value=size, unit=unit),
                                cost=Cost(value=item['cost'], currency=currency),
-                               asset=literal_eval(item['asset']),
+                               asset=bool(strtobool(str(item['asset']))),
                                tags=item['tags'],
                                notes=item['notes'])
             saved_item_object = item_object.save()
